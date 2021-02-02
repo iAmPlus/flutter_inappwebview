@@ -458,7 +458,7 @@ public class InAppWebViewClient extends WebViewClient {
         //     }
         //   }
         // }
-        handler.proceed();
+        handler.cancel();
         return;
 
         InAppWebViewClient.super.onReceivedSslError(view, handler, error);
