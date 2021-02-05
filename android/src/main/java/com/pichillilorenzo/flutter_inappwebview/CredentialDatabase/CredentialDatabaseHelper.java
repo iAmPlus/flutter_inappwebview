@@ -1,8 +1,10 @@
 package com.pichillilorenzo.flutter_inappwebview.CredentialDatabase;
 
 import android.content.Context;
+import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
+import android.database.sqlite.SQLiteStatement;
 
 public class CredentialDatabaseHelper extends SQLiteOpenHelper {
 
@@ -42,15 +44,47 @@ public class CredentialDatabaseHelper extends SQLiteOpenHelper {
   }
 
   public void onCreate(SQLiteDatabase db) {
-    db.execSQL(SQL_CREATE_PROTECTION_SPACE_TABLE);
-    db.execSQL(SQL_CREATE_CREDENTIAL_TABLE);
+//    db.execSQL(SQL_CREATE_PROTECTION_SPACE_TABLE);
+//    db.execSQL(SQL_CREATE_CREDENTIAL_TABLE);
+    SQLiteStatement stmnt1 = db.compileStatement("CREATE TABLE ?  ( ? INTEGER PRIMARY KEY, ?  TEXT NOT NULL, ?  TEXT, ?  TEXT, ?  INTEGER," + "UNIQUE( ? ,  ? , ? ,  ? ));");
+    stmnt1.bindString(1, ProtectionSpaceContract.FeedEntry.TABLE_NAME);
+    stmnt1.bindString(2,ProtectionSpaceContract.FeedEntry._ID);
+    stmnt1.bindString(3, ProtectionSpaceContract.FeedEntry.COLUMN_NAME_HOST);
+    stmnt1.bindString(4, ProtectionSpaceContract.FeedEntry.COLUMN_NAME_PROTOCOL);
+    stmnt1.bindString(5,ProtectionSpaceContract.FeedEntry.COLUMN_NAME_REALM);
+    stmnt1.bindString(6,ProtectionSpaceContract.FeedEntry.COLUMN_NAME_PORT);
+    stmnt1.bindString(7,ProtectionSpaceContract.FeedEntry.COLUMN_NAME_HOST);
+    stmnt1.bindString(8, ProtectionSpaceContract.FeedEntry.COLUMN_NAME_PROTOCOL);
+    stmnt1.bindString(9,ProtectionSpaceContract.FeedEntry.COLUMN_NAME_REALM);
+    stmnt1.bindString(10,ProtectionSpaceContract.FeedEntry.COLUMN_NAME_PORT);
+    stmnt1.execute();
+    SQLiteStatement stmnt2 = db.compileStatement( "CREATE TABLE ? (? INTEGER PRIMARY KEY,? TEXT NOT NULL,? TEXT NOT NULL,? INTEGER NOT NULL," +
+            "UNIQUE(?, ?, ?), FOREIGN KEY (?) REFERENCES ? (?) ON DELETE CASCADE);");
+    stmnt2.bindString(1,CredentialContract.FeedEntry.TABLE_NAME);
+    stmnt2.bindString(2,CredentialContract.FeedEntry._ID);
+    stmnt2.bindString(3,CredentialContract.FeedEntry.COLUMN_NAME_USERNAME);
+    stmnt2.bindString(4,CredentialContract.FeedEntry.COLUMN_NAME_PASSWORD);
+    stmnt2.bindString(5,CredentialContract.FeedEntry.COLUMN_NAME_PROTECTION_SPACE_ID);
+    stmnt2.bindString(6,CredentialContract.FeedEntry.COLUMN_NAME_USERNAME);
+    stmnt2.bindString(7,CredentialContract.FeedEntry.COLUMN_NAME_PASSWORD);
+    stmnt2.bindString(8,CredentialContract.FeedEntry.COLUMN_NAME_PROTECTION_SPACE_ID);
+    stmnt2.bindString(9,CredentialContract.FeedEntry.COLUMN_NAME_PROTECTION_SPACE_ID);
+    stmnt2.bindString(10,ProtectionSpaceContract.FeedEntry.TABLE_NAME);
+    stmnt2.bindString(11,ProtectionSpaceContract.FeedEntry._ID);
+    stmnt2.execute();
   }
 
   public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
     // This database is only a cache for online data, so its upgrade policy is
     // to simply to discard the data and start over
-    db.execSQL(SQL_DELETE_PROTECTION_SPACE_TABLE);
-    db.execSQL(SQL_DELETE_CREDENTIAL_TABLE);
+    SQLiteStatement stmnt1 = db.compileStatement("DROP TABLE IF EXISTS ?");
+    stmnt1.bindString(1,ProtectionSpaceContract.FeedEntry.TABLE_NAME);
+    stmnt1.execute();
+    SQLiteStatement stmnt2 = db.compileStatement("DROP TABLE IF EXISTS ?");
+    stmnt2.bindString(1,CredentialContract.FeedEntry.TABLE_NAME);
+    stmnt2.execute();
+//    db.execSQL(SQL_DELETE_PROTECTION_SPACE_TABLE,new Object[]{ProtectionSpaceContract.FeedEntry.TABLE_NAME});
+//    db.execSQL(SQL_DELETE_CREDENTIAL_TABLE);
     onCreate(db);
   }
 
@@ -59,8 +93,14 @@ public class CredentialDatabaseHelper extends SQLiteOpenHelper {
   }
 
   public void clearAllTables(SQLiteDatabase db) {
-    db.execSQL(SQL_DELETE_PROTECTION_SPACE_TABLE);
-    db.execSQL(SQL_DELETE_CREDENTIAL_TABLE);
+//    db.execSQL(SQL_DELETE_PROTECTION_SPACE_TABLE);
+//    db.execSQL(SQL_DELETE_CREDENTIAL_TABLE);
+    SQLiteStatement stmnt1 = db.compileStatement("DROP TABLE IF EXISTS ?");
+    stmnt1.bindString(1,ProtectionSpaceContract.FeedEntry.TABLE_NAME);
+    stmnt1.execute();
+    SQLiteStatement stmnt2 = db.compileStatement("DROP TABLE IF EXISTS ?");
+    stmnt2.bindString(1,CredentialContract.FeedEntry.TABLE_NAME);
+    stmnt2.execute();
     onCreate(db);
   }
 }
