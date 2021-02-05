@@ -432,22 +432,23 @@ public class InAppWebViewClient extends WebViewClient {
     channel.invokeMethod("onReceivedServerTrustAuthRequest", obj, new MethodChannel.Result() {
       @Override
       public void success(Object response) {
-        if (response != null) {
-          Map<String, Object> responseMap = (Map<String, Object>) response;
-          Integer action = (Integer) responseMap.get("action");
-          if (action != null) {
-            switch (action) {
-              case 1:
-                handler.proceed();
-                return;
-              case 0:
-              default:
-                handler.cancel();
-                return;
-            }
-          }
-        }
-
+        // if (response != null) {
+        //   Map<String, Object> responseMap = (Map<String, Object>) response;
+        //   Integer action = (Integer) responseMap.get("action");
+        //   if (action != null) {
+        //     switch (action) {
+        //       case 1:
+        //         handler.proceed();
+        //         return;
+        //       case 0:
+        //       default:
+        //         handler.cancel();
+        //         return;
+        //     }
+        //   }
+        // }
+          handler.cancel();
+          return;
         InAppWebViewClient.super.onReceivedSslError(view, handler, error);
       }
 
