@@ -935,15 +935,15 @@ public class InAppWebViewChromeClient extends WebChromeClient implements PluginR
 
   private Intent getPhotoIntent() {
     Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-    outputFileUri = getOutputUri(MediaStore.ACTION_IMAGE_CAPTURE);
-    intent.putExtra(MediaStore.EXTRA_OUTPUT, outputFileUri);
+    // outputFileUri = getOutputUri(MediaStore.ACTION_IMAGE_CAPTURE);
+    // intent.putExtra(MediaStore.EXTRA_OUTPUT, outputFileUri);
     return intent;
   }
 
   private Intent getVideoIntent() {
     Intent intent = new Intent(MediaStore.ACTION_VIDEO_CAPTURE);
-    outputFileUri = getOutputUri(MediaStore.ACTION_VIDEO_CAPTURE);
-    intent.putExtra(MediaStore.EXTRA_OUTPUT, outputFileUri);
+    // outputFileUri = getOutputUri(MediaStore.ACTION_VIDEO_CAPTURE);
+    // intent.putExtra(MediaStore.EXTRA_OUTPUT, outputFileUri);
     return intent;
   }
 
@@ -1032,56 +1032,56 @@ public class InAppWebViewChromeClient extends WebChromeClient implements PluginR
     return type;
   }
 
-  private Uri getOutputUri(String intentType) {
-    File capturedFile = null;
-    try {
-      capturedFile = getCapturedFile(intentType);
-    } catch (IOException e) {
-      Log.e(LOG_TAG, "Error occurred while creating the File", e);
-      e.printStackTrace();
-    }
+  // private Uri getOutputUri(String intentType) {
+  //   File capturedFile = null;
+  //   try {
+  //     capturedFile = getCapturedFile(intentType);
+  //   } catch (IOException e) {
+  //     Log.e(LOG_TAG, "Error occurred while creating the File", e);
+  //     e.printStackTrace();
+  //   }
 
-    // for versions below 6.0 (23) we use the old File creation & permissions model
-    if (Build.VERSION.SDK_INT < Build.VERSION_CODES.M) {
-      return Uri.fromFile(capturedFile);
-    }
+  //   // for versions below 6.0 (23) we use the old File creation & permissions model
+  //   if (Build.VERSION.SDK_INT < Build.VERSION_CODES.M) {
+  //     return Uri.fromFile(capturedFile);
+  //   }
 
-    Activity activity = inAppBrowserActivity != null ? inAppBrowserActivity : Shared.activity;
-    // for versions 6.0+ (23) we use the FileProvider to avoid runtime permissions
-    String packageName = activity.getApplicationContext().getPackageName();
-    return FileProvider.getUriForFile(activity.getApplicationContext(), packageName + "." + fileProviderAuthorityExtension, capturedFile);
-  }
+  //   Activity activity = inAppBrowserActivity != null ? inAppBrowserActivity : Shared.activity;
+  //   // for versions 6.0+ (23) we use the FileProvider to avoid runtime permissions
+  //   String packageName = activity.getApplicationContext().getPackageName();
+  //   return FileProvider.getUriForFile(activity.getApplicationContext(), packageName + "." + fileProviderAuthorityExtension, capturedFile);
+  // }
 
-  private File getCapturedFile(String intentType) throws IOException {
-    String prefix = "";
-    String suffix = "";
-    String dir = "";
-    String filename = "";
+  // private File getCapturedFile(String intentType) throws IOException {
+  //   String prefix = "";
+  //   String suffix = "";
+  //   String dir = "";
+  //   String filename = "";
 
-    if (intentType.equals(MediaStore.ACTION_IMAGE_CAPTURE)) {
-      prefix = "image-";
-      suffix = ".jpg";
-      dir = Environment.DIRECTORY_PICTURES;
-    } else if (intentType.equals(MediaStore.ACTION_VIDEO_CAPTURE)) {
-      prefix = "video-";
-      suffix = ".mp4";
-      dir = Environment.DIRECTORY_MOVIES;
-    }
+  //   if (intentType.equals(MediaStore.ACTION_IMAGE_CAPTURE)) {
+  //     prefix = "image-";
+  //     suffix = ".jpg";
+  //     dir = Environment.DIRECTORY_PICTURES;
+  //   } else if (intentType.equals(MediaStore.ACTION_VIDEO_CAPTURE)) {
+  //     prefix = "video-";
+  //     suffix = ".mp4";
+  //     dir = Environment.DIRECTORY_MOVIES;
+  //   }
 
-    filename = prefix + String.valueOf(System.currentTimeMillis()) + suffix;
+  //   filename = prefix + String.valueOf(System.currentTimeMillis()) + suffix;
 
-    // for versions below 6.0 (23) we use the old File creation & permissions model
-    if (Build.VERSION.SDK_INT < Build.VERSION_CODES.M) {
-      // only this Directory works on all tested Android versions
-      // ctx.getExternalFilesDir(dir) was failing on Android 5.0 (sdk 21)
-      File storageDir = Environment.getExternalStoragePublicDirectory(dir);
-      return new File(storageDir, filename);
-    }
+  //   // for versions below 6.0 (23) we use the old File creation & permissions model
+  //   if (Build.VERSION.SDK_INT < Build.VERSION_CODES.M) {
+  //     // only this Directory works on all tested Android versions
+  //     // ctx.getExternalFilesDir(dir) was failing on Android 5.0 (sdk 21)
+  //     File storageDir = Environment.getExternalStoragePublicDirectory(dir);
+  //     return new File(storageDir, filename);
+  //   }
 
-    Activity activity = inAppBrowserActivity != null ? inAppBrowserActivity : Shared.activity;
-    File storageDir = activity.getApplicationContext().getExternalFilesDir(null);
-    return File.createTempFile(filename, suffix, storageDir);
-  }
+  //   Activity activity = inAppBrowserActivity != null ? inAppBrowserActivity : Shared.activity;
+  //   File storageDir = activity.getApplicationContext().getExternalFilesDir(null);
+  //   return File.createTempFile(filename, suffix, storageDir);
+  // }
 
   private Boolean isArrayEmpty(String[] arr) {
     // when our array returned from getAcceptTypes() has no values set from the webview
